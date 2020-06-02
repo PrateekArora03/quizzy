@@ -28,6 +28,10 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1', '>= 3.1.13'
 
+# bundler-audit provides patch-level verification for Bundled apps
+gem 'bundler-audit', require: false
+gem 'ruby_audit', require: false
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
