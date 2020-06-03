@@ -87,4 +87,18 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
     assert_equal "Password is too short (minimum is 6 characters)", @user.errors.full_messages[0]
   end
+
+  test "user should have a valid role" do
+    valid_roles = %w[regular_user administrator]
+    valid_roles.each do |valid_role|
+      @user.role = valid_role
+      assert @user.valid?, "#{valid_role} should be valid"
+    end
+  end
+
+  test "user should not have a invalid role" do
+    invalid_role = "i_am_admin"
+    @user.role = invalid_role
+    assert_not @user.valid?, "#{invalid_role} should be invalid"
+  end
 end
