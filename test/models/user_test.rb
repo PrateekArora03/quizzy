@@ -89,9 +89,11 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user should have a valid role" do
-    valid_role = "regular_user"
-    @user.role = valid_role
-    assert @user.valid?, "#{valid_role} should be valid"
+    valid_roles = %w[regular_user administrator]
+    valid_roles.each do |valid_role|
+      @user.role = valid_role
+      assert @user.valid?, "#{valid_role} should be valid"
+    end
   end
 
   test "user should not have a invalid role" do

@@ -6,7 +6,7 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }
-  validates :role, presence: true, inclusion: { in: %w[regular_user], message: "must be a regular_user" }
+  validates :role, presence: true, inclusion: { in: %w[regular_user administrator], message: "must be a regular_user" }
   
   private
     def email_downcase
