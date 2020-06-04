@@ -13,6 +13,9 @@ gem 'webpacker', '~> 4.0'
 # Use react for render view
 gem 'react-rails', '~> 2.6', '>= 2.6.1'
 
+# UI libarary for building web applications.
+gem 'bootstrap', '~> 4.5'
+
 # database
 gem 'pg'
 
