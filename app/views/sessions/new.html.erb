@@ -1,0 +1,5 @@
+<% provide(:title, "Log in") %>
+<h3 class="py-3">Sign In</h3>
+<%= form_with(url: sessions_path, local: true) do |f| %>
+  <%= react_component('sessions/New') %>
+<% end %>
