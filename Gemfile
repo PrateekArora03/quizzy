@@ -10,6 +10,9 @@ gem 'sass-rails', '>= 6'
 
 gem 'webpacker', '~> 4.0'
 
+# Use react for render view
+gem 'react-rails', '~> 2.6', '>= 2.6.1'
+
 # database
 gem 'pg'
 
