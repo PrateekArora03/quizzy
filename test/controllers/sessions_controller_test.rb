@@ -41,7 +41,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect destroy when not logged in" do
-    delete "/sessions/+#{@user.id}"
+    delete "/sessions"
 
     assert_equal "destroy", @controller.action_name
     assert_redirected_to login_url
@@ -49,7 +49,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should logout and redirect" do
     login_user(@user)
-    delete "/sessions/+#{@user.id}"
+    delete "/sessions"
 
     assert_equal "destroy", @controller.action_name
     assert_nil session[:user_id]
