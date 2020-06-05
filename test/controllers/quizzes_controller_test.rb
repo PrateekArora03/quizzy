@@ -4,7 +4,7 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
   
   def setup
     @user = User.new(first_name: "Prateek", last_name: "Arora", email: "prateek@gmail.com", password: "welcome", password_confirmation: "welcome")
-    @user.save
+    @user.save!
   end
 
   test "should redirect index when not logged in" do
