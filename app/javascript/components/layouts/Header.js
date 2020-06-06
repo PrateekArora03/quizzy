@@ -30,7 +30,7 @@ const Header = ({ user, logged_in }) => {
               </button>
             </div>
           ) : (
-            <a href="/login" className="navbar-brand">
+            <a href="/sessions/new" className="navbar-brand">
               Login
             </a>
           )}

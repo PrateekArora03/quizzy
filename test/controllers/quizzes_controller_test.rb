@@ -8,9 +8,9 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect index when not logged in" do
-    get dashboard_path
+    get root_path
 
     assert_equal "index", @controller.action_name
-    assert_redirected_to login_url
+    assert_redirected_to new_sessions_path
   end
 end
