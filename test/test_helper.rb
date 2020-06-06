@@ -7,4 +7,11 @@ class ActiveSupport::TestCase
   parallelize(workers: :number_of_processors)
 
   # Add more helper methods to be used by all tests here...
+  def login_user(user)
+    post sessions_path, params: { email: user.email, password: user.password }
+  end
+  
+  def logout
+    delete sessions_path
+  end
 end
