@@ -17,10 +17,10 @@ ActiveRecord::Schema.define(version: 2020_06_08_113226) do
 
   create_table "quizzes", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "users_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["users_id"], name: "index_quizzes_on_users_id"
+    t.index ["user_id"], name: "index_quizzes_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -34,5 +34,5 @@ ActiveRecord::Schema.define(version: 2020_06_08_113226) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "quizzes", "users", column: "users_id", on_delete: :restrict
+  add_foreign_key "quizzes", "users", on_delete: :restrict
 end
