@@ -3,9 +3,9 @@ import React from "react";
 const Index = () => {
   return (
     <div className="d-flex justify-content-end">
-      <button type="button" className="btn btn-primary">
+      <a href="/quizzes/new" className="btn btn-primary">
         Add new quiz
-      </button>
+      </a>
     </div>
   );
 };
