@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
-  before_action :logged_in_user, except: [:destroy]
-  skip_before_action :logged_out_user, except: [:destroy]
+  before_action :ensure_user_logged_in, except: [:destroy]
+  skip_before_action :ensure_user_logged_out, except: [:destroy]
 
   def new
     render

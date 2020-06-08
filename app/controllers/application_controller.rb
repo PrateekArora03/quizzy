@@ -1,14 +1,14 @@
 class ApplicationController < ActionController::Base
   include SessionsHelper
-  before_action :logged_out_user
+  before_action :ensure_user_logged_out
 
-  def logged_in_user
+  def ensure_user_logged_in
     if logged_in?
       redirect_to root_path
     end
   end
 
-  def logged_out_user
+  def ensure_user_logged_out
     unless logged_in?
       respond_to do |format|
         format.html do
