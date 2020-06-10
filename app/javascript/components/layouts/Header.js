@@ -10,7 +10,7 @@ const Header = ({ user, logged_in }) => {
     }
   };
   return (
-    <header className="navbar navbar-fixed-top navbar-dark bg-primary mb-2">
+    <header className="navbar navbar-fixed-top navbar-dark bg-primary mb-3">
       <nav className="container">
         <a href="/" className="navbar-brand">
           Quizzy
