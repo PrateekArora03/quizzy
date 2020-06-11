@@ -1,11 +1,15 @@
 class QuizzesController < ApplicationController
-  before_action :load_quiz, only: [:edit, :update, :destroy]
+  before_action :load_quiz, only: [:show, :edit, :update, :destroy]
 
   def index
     @quizzes = current_user.quizzes.as_json(only: [:id, :name])
   end
 
   def new
+    render
+  end
+
+  def show
     render
   end
 

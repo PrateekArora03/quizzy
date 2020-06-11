@@ -60,6 +60,11 @@ function QuizTable({ quizzes, setMessages }) {
       {
         Header: "Quiz Name",
         accessor: "name",
+        Cell: (props) => (
+          <a href={`/quizzes/${props.data[props.row.index].id}`}>
+            {props.data[props.row.index].name}
+          </a>
+        ),
       },
       {
         Header: "Edit",
