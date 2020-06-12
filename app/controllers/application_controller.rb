@@ -2,21 +2,35 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :ensure_user_logged_out
 
-  def ensure_user_logged_in
-    if logged_in?
-      redirect_to root_path
-    end
-  end
-
-  def ensure_user_logged_out
-    unless logged_in?
-      respond_to do |format|
-        format.html do
-          flash[:danger] = "Please Log In"
-          redirect_to new_sessions_path
-        end
-        format.json { render status: :unauthorized, json: { errors: "You need to login" } }
+  private
+    def ensure_user_logged_in
+      if logged_in?
+        redirect_to root_path
       end
     end
-  end
+
+    def ensure_user_logged_out
+      unless logged_in?
+        respond_to do |format|
+          format.html do
+            flash[:danger] = "Please Log In"
+            redirect_to new_sessions_path
+          end
+          format.json { render status: :unauthorized, json: { errors: "You need to login" } }
+        end
+      end
+    end
+
+    def load_quiz
+      @quiz = current_user.quizzes.find(params[:id] || params[:quiz_id]);
+      rescue ActiveRecord::RecordNotFound => errors
+        respond_to do |format|
+          format.html do
+            flash[:warning] = "Quiz not found!"
+            redirect_to quizzes_path
+          end
+          format.json { render status: :not_found, json: {errors: ["Quiz not found!"] }
+        }
+      end
+    end
 end
