@@ -5,7 +5,10 @@ const Quiz = ({ quiz }) => {
   return (
     <Fragment>
       <div className="d-flex justify-content-end">
-        <a href="#" className="btn btn-primary">
+        <a
+          href={`/quizzes/${quiz.id}/questions/new`}
+          className="btn btn-primary"
+        >
           Add questions
         </a>
       </div>
