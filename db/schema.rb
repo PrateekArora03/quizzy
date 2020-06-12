@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_06_11_214758) do
   create_table "questions", force: :cascade do |t|
     t.text "description", null: false
     t.jsonb "options", default: {}, null: false
+    t.integer "correct_answer", null: false
     t.bigint "quiz_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
