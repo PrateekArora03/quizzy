@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import PropTypes from "prop-types";
 import Alert from "../layouts/Alert";
 import API from "../../utils/API";
 
@@ -167,6 +168,10 @@ const QuestionForm = ({ quiz }) => {
       </form>
     </Fragment>
   );
+};
+
+QuestionForm.prototype = {
+  quiz: PropTypes.object.isRequired,
 };
 
 export default QuestionForm;
