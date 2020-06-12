@@ -43,7 +43,7 @@ const QuestionForm = ({ quiz }) => {
 
       if (response === undefined) {
         await API(`/quizzes/${quiz.id}/questions`, "post", { question });
-        window.location.href = "/";
+        window.location.href = `/quizzes/${quiz.id}`;
       }
     } catch ({ response }) {
       response.data.type = "danger";
