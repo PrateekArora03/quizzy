@@ -10,6 +10,7 @@ class QuizzesController < ApplicationController
   end
 
   def show
+    @questions = @quiz.questions.all
     render
   end
 
