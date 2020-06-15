@@ -1,19 +1,23 @@
 class SessionsController < ApplicationController
-  before_action :ensure_user_logged_in, except: [:destroy]
-  skip_before_action :ensure_user_logged_out, except: [:destroy]
+  before_action :ensure_user_not_logged_in, except: [:destroy]
+  skip_before_action :ensure_user_logged_in, except: [:destroy]
 
   def new
-    render
   end
 
   def create
     user = User.find_by(email: params[:email].downcase)
-    if user && user.authenticate(params[:password])
-      log_in user
-      flash[:success] = "Successfully logged in!"
-      redirect_to root_path
+    if user
+      if user.role != "administrator"
+        flash[:danger] = 'Unauthorized user!'
+        redirect_to new_sessions_path
+      else user.authenticate(params[:password])
+        log_in user
+        flash[:success] = "Successfully logged in!"
+        redirect_to root_path
+      end
     else
-      flash.now[:danger] = 'Invalid email/password combination.'
+      flash[:danger] = 'Invalid email/password combination'
       redirect_to new_sessions_path
     end
   end

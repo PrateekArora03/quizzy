@@ -4,7 +4,7 @@ import API from "../../utils/API";
 
 const Header = ({ user, logged_in }) => {
   const handleLogOut = async () => {
-    const response = await API(`sessions`, "delete");
+    const response = await API(`/sessions`, "delete");
     if (response.status === 200) {
       window.location.href = "/";
     }

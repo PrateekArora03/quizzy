@@ -1,15 +1,15 @@
 class ApplicationController < ActionController::Base
   include SessionsHelper
-  before_action :ensure_user_logged_out
+  before_action :ensure_user_logged_in
 
   private
-    def ensure_user_logged_in
+    def ensure_user_not_logged_in
       if logged_in?
         redirect_to root_path
       end
     end
 
-    def ensure_user_logged_out
+    def ensure_user_logged_in
       unless logged_in?
         respond_to do |format|
           format.html do
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     end
 
     def load_quiz
-      @quiz = current_user.quizzes.find(params[:id] || params[:quiz_id]);
+      @quiz = current_user.quizzes.find(params[:quiz_id] || params[:id]);
       rescue ActiveRecord::RecordNotFound => errors
         respond_to do |format|
           format.html do
@@ -30,6 +30,19 @@ class ApplicationController < ActionController::Base
             redirect_to quizzes_path
           end
           format.json { render status: :not_found, json: {errors: ["Quiz not found!"] }
+        }
+      end
+    end
+
+    def load_question
+      @question = @quiz.questions.find(params[:id]);
+      rescue ActiveRecord::RecordNotFound => errors
+        respond_to do |format|
+          format.html do
+            flash[:warning] = "Question not found!"
+            redirect_to quizzes_path
+          end
+          format.json { render status: :not_found, json: {errors: ["Question not found!"] }
         }
       end
     end

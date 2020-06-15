@@ -3,7 +3,7 @@ require 'test_helper'
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   
   def setup
-    @user = User.new(first_name: "Prateek", last_name: "Arora", email: "prateek@gmail.com", password: "welcome", password_confirmation: "welcome")
+    @user = User.new(first_name: "Prateek", last_name: "Arora", email: "prateek@gmail.com", password: "welcome", password_confirmation: "welcome", role: "administrator")
     @user.save!
   end
 
@@ -36,7 +36,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     login_user(@user)
 
     assert_equal "create", @controller.action_name
-    assert_equal "Invalid email/password combination.", flash[:danger]
+    assert_equal "Invalid email/password combination", flash[:danger]
     assert_redirected_to new_sessions_path
   end
 

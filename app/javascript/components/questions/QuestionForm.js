@@ -3,12 +3,16 @@ import PropTypes from "prop-types";
 import Alert from "../layouts/Alert";
 import API from "../../utils/API";
 
-const QuestionForm = ({ quiz }) => {
-  const [question, setQuestion] = useState({
-    description: "",
-    options: ["", ""],
-    correct_answer: null,
-  });
+const QuestionForm = ({ quiz, questionData }) => {
+  const [question, setQuestion] = useState(
+    !questionData
+      ? {
+          description: "",
+          options: ["", ""],
+          correct_answer: null,
+        }
+      : { ...questionData }
+  );
   const [messages, setMessages] = useState({});
 
   const handleSubmit = async (event) => {
@@ -43,7 +47,15 @@ const QuestionForm = ({ quiz }) => {
       }
 
       if (response === undefined) {
-        await API(`/quizzes/${quiz.id}/questions`, "post", { question });
+        await API(
+          `/quizzes/${quiz.id}/${
+            questionData ? `questions/${question.id}` : `questions`
+          }`,
+          questionData ? "put" : "post",
+          {
+            question,
+          }
+        );
         window.location.href = `/quizzes/${quiz.id}`;
       }
     } catch ({ response }) {
@@ -162,7 +174,7 @@ const QuestionForm = ({ quiz }) => {
         </div>
         <div className="col-md-6 mb-3">
           <button type="submit" className="btn btn-primary mb-2">
-            Add Question
+            {questionData ? "Update Question" : "Add Question"}
           </button>
         </div>
       </form>
@@ -172,6 +184,7 @@ const QuestionForm = ({ quiz }) => {
 
 QuestionForm.prototype = {
   quiz: PropTypes.object.isRequired,
+  question: PropTypes.object,
 };
 
 export default QuestionForm;
