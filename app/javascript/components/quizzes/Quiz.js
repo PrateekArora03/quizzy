@@ -1,23 +1,57 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import Question from "../questions/Question";
+import API from "../../utils/API";
 
 const Quiz = ({ quiz, questions }) => {
+  const [slug, setSlug] = useState(quiz.slug);
+
+  const handlePublish = async () => {
+    const response = await API(`/quizzes/${quiz.id}`, "put", { publish: true });
+    setSlug(response.data.slug);
+  };
+
   return (
     <Fragment>
-      <div className="d-flex justify-content-end mb-3">
-        <a
-          href={`/quizzes/${quiz.id}/questions/new`}
-          className="btn btn-primary mr-2"
-        >
-          Add questions
-        </a>
-        {questions.length > 0 && (
-          <a href="#" className="btn btn-primary">
-            Publish
-          </a>
-        )}
+      <div className="row justify-content-between align-items-center w-100 m-0 border-bottom pb-1">
+        <div>
+          <h3 className="m-0">{quiz.name}</h3>
+          <small className="text-black-50">{questions.length} questions</small>
+        </div>
+        <div>
+          <div className="d-flex justify-content-end mb-3">
+            <a
+              href={`/quizzes/${quiz.id}/questions/new`}
+              className="btn btn-primary mr-2"
+            >
+              Add questions
+            </a>
+            {questions.length > 0 &&
+              (slug ? (
+                <button type="button" className="btn btn-success">
+                  ✅ Published
+                </button>
+              ) : (
+                <button
+                  onClick={handlePublish}
+                  type="button"
+                  className="btn btn-success"
+                >
+                  Publish
+                </button>
+              ))}
+          </div>
+        </div>
       </div>
+
+      {slug && (
+        <div className="alert alert-info mb-3" role="alert">
+          This quiz is published here —{" "}
+          <a href={"/public/" + slug + "/attempts/new"} target="_blank">
+            {window.location.origin + "/public/" + slug + "/attempts/new"}
+          </a>
+        </div>
+      )}
       {questions.length > 0 ? (
         questions.map((question, index) => (
           <Question

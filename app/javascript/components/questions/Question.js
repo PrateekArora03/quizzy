@@ -18,7 +18,7 @@ function Question({ question, quiz_id, index }) {
     }
   };
   return (
-    <div className="container mb-5">
+    <div className="container mt-4 mb-5">
       <div className="row mb-2">
         <div className="col-2">
           <label className="text-muted">Question {index}</label>
