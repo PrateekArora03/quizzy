@@ -2,17 +2,27 @@ import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import Question from "../questions/Question";
 import API from "../../utils/API";
+import Alert from "../layouts/Alert";
 
 const Quiz = ({ quiz, questions }) => {
   const [slug, setSlug] = useState(quiz.slug);
+  const [messages, setMessages] = useState([]);
 
   const handlePublish = async () => {
-    const response = await API(`/quizzes/${quiz.id}`, "put", { publish: true });
-    setSlug(response.data.slug);
+    try {
+      const response = await API(`/quizzes/${quiz.id}`, "put", {
+        publish: true,
+      });
+      setSlug(response.data.slug);
+    } catch ({ response }) {
+      response.data.type = "danger";
+      setMessages(response.data);
+    }
   };
 
   return (
     <Fragment>
+      {Object.keys(messages).length > 0 && <Alert messages={messages} />}
       <div className="row justify-content-between align-items-center w-100 m-0 border-bottom pb-1">
         <div>
           <h3 className="m-0">{quiz.name}</h3>

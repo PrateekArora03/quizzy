@@ -31,8 +31,11 @@ class QuizzesController < ApplicationController
   def update
     if params[:publish]
       @quiz.generate_slug
-      @quiz.save!
-      return render status: :ok, json: { slug: @quiz.slug }
+      if @quiz.save
+        return render status: :ok, json: { slug: @quiz.slug }
+      else
+        render status: :unprocessable_entity, json: { errors: ["Failed to publish URL!"] }
+      end
     elsif @quiz.update(quiz_params)
       flash[:success] = "Quiz updated!"
     else
