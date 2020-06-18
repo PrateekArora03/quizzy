@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_18_192606) do
+ActiveRecord::Schema.define(version: 2020_06_18_221238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attempt_answers", force: :cascade do |t|
+    t.integer "submitted_option", null: false
+    t.bigint "question_id", null: false
+    t.bigint "attempt_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attempt_id"], name: "index_attempt_answers_on_attempt_id"
+    t.index ["question_id"], name: "index_attempt_answers_on_question_id"
+  end
 
   create_table "attempts", force: :cascade do |t|
     t.boolean "submitted", default: false, null: false
@@ -58,6 +68,8 @@ ActiveRecord::Schema.define(version: 2020_06_18_192606) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "attempt_answers", "attempts", on_delete: :cascade
+  add_foreign_key "attempt_answers", "questions", on_delete: :cascade
   add_foreign_key "attempts", "quizzes", on_delete: :cascade
   add_foreign_key "attempts", "users", on_delete: :cascade
   add_foreign_key "questions", "quizzes", on_delete: :cascade
