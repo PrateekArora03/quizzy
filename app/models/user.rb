@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :quizzes, dependent: :restrict_with_error
+  has_many :attempts, dependent: :destroy
   before_save :email_downcase
   validates :first_name, presence: true, length: { maximum: 20 }
   validates :last_name, presence: true, length: { maximum: 20 }
