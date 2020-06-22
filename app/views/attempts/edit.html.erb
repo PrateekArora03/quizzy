@@ -1,0 +1,2 @@
+<% provide(:title, @quiz.name) %>
+<%= react_component('attempts/Edit', {quiz_name: @quiz.name, quiz_slug: @quiz.slug ,questions: @quiz.questions, attempt_id: @attempt.id}) %>
