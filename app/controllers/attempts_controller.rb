@@ -9,7 +9,7 @@ class AttemptsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      p @attempt = @user.attempts.build({ quiz_id: @quiz.id, submitted: false })
+      @attempt = @user.attempts.build({ quiz_id: @quiz.id, submitted: false })
       if @attempt.save
         render status: :created, json: { attempt_id: @attempt.id }
       else
@@ -23,7 +23,7 @@ class AttemptsController < ApplicationController
   def edit
     if @attempt.submitted
       flash[:warning] = "This attempt has already submitted!"
-      redirect_to quizzes_path
+      redirect_to public_attempt_path
     else
       render
     end
@@ -51,6 +51,7 @@ class AttemptsController < ApplicationController
   end
 
   def show
+    @attempt_answer = @attempt.attempt_answers.as_json(include: :question)
   end
 
   private
@@ -76,8 +77,7 @@ class AttemptsController < ApplicationController
     end
 
     def load_attempt
-      p "========="
-      p @attempt = Attempt.find(params[:id]);
+      @attempt = Attempt.find(params[:id]);
       rescue ActiveRecord::RecordNotFound => errors
         respond_to do |format|
           format.html do

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { useTable } from "react-table";
 import API from "../../utils/API";
 
