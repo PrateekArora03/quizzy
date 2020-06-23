@@ -17,7 +17,6 @@ const New = ({ quiz }) => {
           first_name: firstName,
           last_name: lastName,
           email,
-          password: Math.random().toString(36).slice(2),
         },
       });
       window.location.href = `/public/${quiz.slug}/attempts/${response.data.attempt_id}/edit`;

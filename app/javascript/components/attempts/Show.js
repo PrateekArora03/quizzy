@@ -1,15 +1,8 @@
 import React from "react";
 
-const Show = ({
-  correct_answers_count,
-  incorrect_answers_count,
-  questions,
-  attempts,
-}) => {
+const Show = ({ correct_answers_count, incorrect_answers_count, attempts }) => {
   return (
     <div className="container">
-      {console.log(questions)}
-      {console.log(attempts)}
       <div className="row d-flex p-4 justify-content-center">
         <div className="p-4 jumbotron col-8 border border-success bg-light">
           <h3 className="display-5">Thank you for taking the quiz!</h3>
@@ -30,16 +23,22 @@ const Show = ({
       <div className="row justify-content-center">
         <div className="pt-4 col-8">
           {attempts.map((attempt, index) => (
-            <div className="mt-2 mb-4 d-flex justify-content-between">
-              <h5 class="col-4">
-                <span class="badge badge-warning">Question {index + 1}</span>
+            <div
+              key={attempt.id}
+              className="mt-2 mb-4 d-flex justify-content-between"
+            >
+              <h5 className="col-4">
+                <span className="badge badge-warning">
+                  Question {index + 1}
+                </span>
               </h5>
-              <div class="col-8 p-0 pb-4">
+              <div className="col-8 p-0 pb-4">
                 <p>{attempt.question.description}</p>
                 <div>
                   {attempt.question.options.map((option, index) => (
                     <div
-                      class={
+                      key={option}
+                      className={
                         attempt.question.correct_answer ===
                           attempt.submitted_option &&
                         attempt.submitted_option === index + 1
@@ -47,13 +46,13 @@ const Show = ({
                           : "input-group mt-1"
                       }
                     >
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">
                           <input
                             type="radio"
-                            class="option-select"
+                            className="option-select"
                             name={`${attempt.question.id}-option`}
-                            disabled="true"
+                            disabled={true}
                             checked={
                               index + 1 === attempt.submitted_option
                                 ? true
@@ -67,12 +66,12 @@ const Show = ({
                       {index + 1 === attempt.question.correct_answer && (
                         <button
                           type="button"
-                          class="btn btn-danger close"
+                          className="btn btn-danger close"
                           aria-label="Close"
                           disabled=""
                         >
                           <span
-                            class="rounded-0 text-white input-group-text"
+                            className="rounded-0 text-white input-group-text"
                             aria-hidden="true"
                           >
                             ✔️

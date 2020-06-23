@@ -7,16 +7,17 @@ class AttemptsController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    if @user.save
-      @attempt = @user.attempts.build({ quiz_id: @quiz.id, submitted: false })
-      if @attempt.save
-        render status: :created, json: { attempt_id: @attempt.id }
-      else
-        render status: :unprocessable_entity, json: { errors: @attempt.errors.full_messages }
-      end
+    ActiveRecord::Base.transaction do
+      @user = User.where(email: user_params[:email]).first_or_initialize(user_params)
+      @user.password = "welcome_regular_user"
+      @user.save!
+      @attempt = @user.attempts.where(quiz_id: @quiz.id).first_or_initialize
+      @attempt.save!
+    end
+    if @attempt
+      render status: :created, json: { attempt_id: @attempt.id }
     else
-      render status: :unprocessable_entity, json: { errors: @user.errors.full_messages }
+      render status: :unprocessable_entity, json: { errors: @attempt.errors.full_messages }
     end
   end
 
@@ -56,7 +57,7 @@ class AttemptsController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :password)
+      params.require(:user).permit(:first_name, :last_name, :email)
     end
 
     def attempt_params
