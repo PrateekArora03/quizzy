@@ -23,7 +23,7 @@ class AttemptsController < ApplicationController
 
   def edit
     if @attempt.submitted
-      flash[:warning] = "This attempt has already submitted!"
+      flash[:warning] = "This quiz has already attempted by the user."
       redirect_to public_attempt_path
     else
       render
