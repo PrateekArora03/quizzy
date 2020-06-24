@@ -1,0 +1,2 @@
+<% provide(:title, @quiz.name) %>
+<%= react_component('attempts/Show', { correct_answers_count: @attempt.correct_answers_count, incorrect_answers_count: @attempt.incorrect_answers_count, attempts: @attempt_answer }) %>
