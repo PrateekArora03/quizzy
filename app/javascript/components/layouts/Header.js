@@ -21,6 +21,9 @@ const Header = ({ user, logged_in }) => {
               <span className="navbar-brand mr-2">
                 {user.first_name + " " + user.last_name}
               </span>
+              <a href="/reports" className="btn btn-success btn-sm mr-2">
+                Reports
+              </a>
               <button
                 onClick={handleLogOut}
                 type="button"

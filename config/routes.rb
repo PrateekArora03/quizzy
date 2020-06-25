@@ -7,4 +7,5 @@ Rails.application.routes.draw do
     resources :questions, except: [:index, :show]
   end
   resource :sessions, only: [:new, :create, :destroy]
+  resource :reports, only: [:show]
 end

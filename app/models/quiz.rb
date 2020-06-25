@@ -15,4 +15,6 @@ class Quiz < ApplicationRecord
       self.slug = "#{self.name.parameterize}-#{index}"
     end
   end
+
+  scope :published, -> { where.not(slug: nil) }
 end
