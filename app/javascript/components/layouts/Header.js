@@ -33,9 +33,13 @@ const Header = ({ user, logged_in }) => {
               </button>
             </div>
           ) : (
-            <a href="/sessions/new" className="navbar-brand">
-              Login
-            </a>
+            <div>
+              {window.location.pathname !== "/sessions/new" && (
+                <a href="/sessions/new" className="navbar-brand">
+                  Login
+                </a>
+              )}
+            </div>
           )}
         </div>
       </nav>
