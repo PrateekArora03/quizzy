@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
       format.html
       format.csv do
         if params[:job_id]
-          p current_job = current_user.jobs.find_by(job_id: params[:job_id])
+          current_job = current_user.jobs.find_by(job_id: params[:job_id])
           if current_job && current_job[:status] == "done"
             return send_file current_job.filename, type: "application/csv"
           end
