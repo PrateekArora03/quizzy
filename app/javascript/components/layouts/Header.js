@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import API from "../../utils/API";
+import routes from "../../utils/routes";
 
 const Header = ({ user, logged_in }) => {
   const handleLogOut = async () => {
@@ -35,7 +36,7 @@ const Header = ({ user, logged_in }) => {
           ) : (
             <div>
               {window.location.pathname !== "/sessions/new" && (
-                <a href="/sessions/new" className="navbar-brand">
+                <a href={routes.new_session_path()} className="navbar-brand">
                   Login
                 </a>
               )}

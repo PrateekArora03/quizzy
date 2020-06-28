@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useTable } from "react-table";
 import API from "../../utils/API";
 import config from "../../utils/config";
+import routes from "../../utils/routes";
 
 function Table({ columns, data }) {
   const {
@@ -65,7 +66,7 @@ function Show({ quizzes }) {
   });
 
   const poll = async ({ callback, interval, maxAttempts }) => {
-    const attempts = 0;
+    let attempts = 0;
     const execPoll = async (resolve, reject) => {
       const result = await callback();
       attempts++;
@@ -89,13 +90,13 @@ function Show({ quizzes }) {
   const handleReport = async () => {
     try {
       setLoading(true);
-      const response = await API("/reports/", "post");
+      const response = await API(routes.reports_path(), "post");
       jobId.current = response.data.job_id;
 
       const pollForCsv = await poll({
         callback: fetchReport,
-        interval: config.interval,
-        maxAttempts: config.maxAttempts,
+        interval: 5000,
+        maxAttempts: 5,
       });
 
       if (!csvFile) {

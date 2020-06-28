@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Question from "../questions/Question";
 import API from "../../utils/API";
 import Alert from "../layouts/Alert";
+import routes from "../../utils/routes";
 
 const Quiz = ({ quiz, questions }) => {
   const [slug, setSlug] = useState(quiz.slug);
@@ -10,7 +11,7 @@ const Quiz = ({ quiz, questions }) => {
 
   const handlePublish = async () => {
     try {
-      const response = await API(`/quizzes/${quiz.id}`, "put", {
+      const response = await API(routes.quiz_path(quiz.id), "put", {
         publish: true,
       });
       setSlug(response.data.slug);
@@ -31,7 +32,7 @@ const Quiz = ({ quiz, questions }) => {
         <div>
           <div className="d-flex justify-content-end mb-3">
             <a
-              href={`/quizzes/${quiz.id}/questions/new`}
+              href={routes.new_question_path(quiz.id)}
               className="btn btn-primary mr-2"
             >
               Add questions

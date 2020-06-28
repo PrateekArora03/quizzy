@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import Alert from "../layouts/Alert";
 import API from "../../utils/API";
+import routes from "../../utils/routes";
 
 const New = (props) => {
   const [quiz, setQuiz] = useState(props.quiz ? props.quiz.name : "");
@@ -10,7 +11,7 @@ const New = (props) => {
     event.preventDefault();
     try {
       await API(
-        props.quiz ? `/quizzes/${props.quiz.id}` : "/quizzes",
+        props.quiz ? routes.quiz_path(props.quiz.id) : routes.quizzes_path(),
         props.quiz ? "put" : "post",
         { quiz: { name: quiz } }
       );
