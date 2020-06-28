@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../../utils/API";
 import Alert from "../layouts/Alert";
+import routes from "../../utils/routes";
 
 const New = ({ quiz }) => {
   const [firstName, setFirstName] = useState("");
@@ -12,14 +13,17 @@ const New = ({ quiz }) => {
     event.preventDefault();
     setMessages({});
     try {
-      const response = await API(`/public/${quiz.slug}/attempts/`, "post", {
+      const response = await API(routes.attempts_path(quiz.slug), "post", {
         user: {
           first_name: firstName,
           last_name: lastName,
           email,
         },
       });
-      window.location.href = `/public/${quiz.slug}/attempts/${response.data.attempt_id}/edit`;
+      window.location.href = routes.edit_attempts_path(
+        quiz.slug,
+        response.data.attempt_id
+      );
     } catch ({ response }) {
       response.data.type = "danger";
       setMessages(response.data);

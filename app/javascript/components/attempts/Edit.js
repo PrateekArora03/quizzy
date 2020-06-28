@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../../utils/API";
 import Alert from "../layouts/Alert";
+import routes from "../../utils/routes";
 
 const Edit = ({ quiz_name, questions, attempt_id, quiz_slug }) => {
   const [attempts, setAttempts] = useState(
@@ -21,10 +22,10 @@ const Edit = ({ quiz_name, questions, attempt_id, quiz_slug }) => {
         };
         setMessages(response);
       } else {
-        await API(`/public/${quiz_slug}/attempts/${attempt_id}`, "put", {
+        await API(routes.attempt_path(quiz_slug, attempt_id), "put", {
           attempts: { options: attempts },
         });
-        window.location.href = `/public/${quiz_slug}/attempts/${attempt_id}`;
+        window.location.href = routes.attempt_path(quiz_slug, attempt_id);
       }
     } catch ({ response }) {
       response.data.type = "danger";
