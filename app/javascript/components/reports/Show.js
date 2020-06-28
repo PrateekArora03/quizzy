@@ -64,7 +64,7 @@ function Show({ quizzes }) {
   });
 
   const poll = async ({ callback, interval, maxAttempts }) => {
-    let attempts = 0;
+    const attempts = 0;
     const execPoll = async (resolve, reject) => {
       const result = await callback();
       attempts++;
@@ -98,7 +98,7 @@ function Show({ quizzes }) {
       });
 
       if (!csvFile) {
-        let csv = await pollForCsv.text();
+        const csv = await pollForCsv.text();
         setCsvFile(csv);
       }
     } catch ({ response }) {
@@ -108,7 +108,7 @@ function Show({ quizzes }) {
 
   const fetchReport = async () => {
     try {
-      let response = await fetch(`/reports.csv?job_id=${jobId.current}`, {
+      const response = await fetch(`/reports.csv?job_id=${jobId.current}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
