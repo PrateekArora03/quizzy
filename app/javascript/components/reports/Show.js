@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useTable } from "react-table";
 import API from "../../utils/API";
+import config from "../../utils/config";
 
 function Table({ columns, data }) {
   const {
@@ -93,8 +94,8 @@ function Show({ quizzes }) {
 
       const pollForCsv = await poll({
         callback: fetchReport,
-        interval: 5000,
-        maxAttempts: 5,
+        interval: config.interval,
+        maxAttempts: config.maxAttempts,
       });
 
       if (!csvFile) {
