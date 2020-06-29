@@ -1,24 +1,38 @@
-# README
+# Quizzy
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Quiz app, build with Ruby On Rails 6.
 
-Things you may want to cover:
+> App is deployed [here](https://quizzy-prateekcodes.herokuapp.com/)
 
-* Ruby version
+## How to run `Quizzy`
 
-* System dependencies
+1. Clone the repository by running the following command
 
-* Configuration
+```sh
+$ git clone https://github.com/PrateekCodes/quizzy.git
+```
 
-* Database creation
+2. Now, go to the cloned directory
 
-* Database initialization
+```sh
+$ cd quizzy
+```
 
-* How to run the test suite
+3. Install dependencies by running the following commands
 
-* Services (job queues, cache servers, search engines, etc.)
+```sh
+$ bundle install
+$ yarn
+```
 
-* Deployment instructions
+4. Setup the database
 
-* ...
+```sh
+$ rails db:create db:migrate db:setup
+```
+
+5. Now to run server.
+
+```sh
+$ rails server
+```
