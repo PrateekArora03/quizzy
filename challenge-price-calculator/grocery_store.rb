@@ -1,74 +1,108 @@
-class GroceryStore
-
-  def initialize(item_unit_price, sale_on_items)
-    @item_unit_price = item_unit_price
-    @sale_on_items = sale_on_items
+module Price
+  def item_unit_price(item)
+    { milk: 3.97, bread: 2.17, banana: 0.99, apple: 0.89 }[item.to_sym]
   end
 
-  private
-  def get_order
-    puts "Please enter all the items purchased separated by a comma:"
-    items = gets.chomp
-    items.split(",").map(&:strip)
-  end
-
-  def calculate_quantity
-    items = get_order
-    items.inject(Hash.new(0)) do |quantity,item|
-      quantity[item] += 1
-      quantity
-    end
-  end
-
-  def calculate_item_price
-    cart_products = calculate_quantity.inject(Hash.new(0)) do |cart, (item, unit)|
-      item = item.to_sym
-      if @sale_on_items[item]
-        quantity_on_sale = unit / @sale_on_items[item][:quantity]
-        quantity_not_on_sale = unit % @sale_on_items[item][:quantity]
-        price = quantity_on_sale * @sale_on_items[item][:price] + quantity_not_on_sale * @item_unit_price[item]
-      else
-        price = unit * @item_unit_price[item]
-      end
-      cart[item] = { quantity: unit, price: price }
-      cart
-    end
-  end
-
-  def calculate_total_price
-    cart = { products: calculate_item_price }
-    cart[:total_price] = cart[:products].inject(0) do |amount, (product, description)|
-      amount + description[:price]
-    end
-    cart
-  end
-
-  def calculate_saved_price
-    cart = calculate_total_price
-    cart[:saved] = cart[:products].inject(0) do |saved, (product, description)|
-      saved + (@item_unit_price[product.to_sym] * description[:quantity] - description[:price])
-    end
-    cart[:saved] = cart[:saved].round(2)
-    cart
-  end
-
-  public
-  def display_bill
-    cart = calculate_saved_price
-    puts "Item \t Quantity \t Price \n" + "-"*30
-
-    cart[:products].each do |key, value|
-      puts "#{key.capitalize()} \t #{value[:quantity]} \t\t #{value[:price]}"
-    end
-    
-    puts "\nTotal price : $#{cart[:total_price]}"
-    puts "You saved $#{cart[:saved]} today."
+  def sale_on_items(item)
+    { milk: { price: 5.00, quantity: 2 }, bread: { price: 6.00, quantity: 3 } }[item.to_sym]
   end
 end
 
-item_unit_price = { milk: 3.97, bread: 2.17, banana: 0.99, apple: 0.89}
-sale_on_items = { milk: { price: 5.00, quantity: 2 }, bread: { price: 6.00, quantity: 3 } }
+class Product
 
-order = GroceryStore.new(item_unit_price, sale_on_items)
+  attr_reader :name, :price, :quantity
+  def initialize(name, price, sale)
+    @name = name
+    @price = price
+    @sale_price = sale ? sale[:price] : nil
+    @quantity_on_sale = sale ? sale[:quantity] : nil
+    @quantity = 1
+  end
+  
+  protected
+  def increment_quantity
+    @quantity += 1
+  end
 
-order.display_bill
+  def calculate_product_price
+    if @sale_price
+      quantity_on_sale = @quantity / @quantity_on_sale
+      quantity_not_on_sale = @quantity % @quantity_on_sale
+      quantity_on_sale * @sale_price + quantity_not_on_sale * @price
+    else
+      @quantity * @price
+    end
+  end
+
+  def saved_price
+    @price * @quantity - calculate_product_price
+  end
+end
+
+class PriceCalculater < Product
+
+  include Price
+  def initialize(items)
+    @items = items
+  end
+
+  def calculate_quantity
+    products = {}
+    @items.split(",").each do |item|
+      item.strip!
+      if products[item]
+        products[item].increment_quantity
+      else
+        products[item] = Product.new(item, item_unit_price(item), sale_on_items(item))
+      end
+    end
+    products
+  end
+
+  def calculate_total_price
+    products = calculate_quantity
+    total = products.inject(0) do |total, (product_name, product)|
+      total + product.calculate_product_price
+    end
+  end
+
+  def calculate_saved_price
+    products = calculate_quantity
+    saved = products.inject(0) do |saved, (product_name, product)|
+      saved + product.saved_price
+    end
+  end
+end
+
+class GroceryStore
+
+  def get_order
+    puts "Please enter all the items purchased separated by a comma:"
+    items = gets.chomp
+    generate_bill(items)
+  end
+
+  private
+  def generate_bill(items)
+    price_calculater = PriceCalculater.new(items)
+    quantity = price_calculater.calculate_quantity
+    total_price = price_calculater.calculate_total_price
+    saved_price = price_calculater.calculate_saved_price
+    display_bill(quantity, total_price, saved_price)
+  end
+
+  def display_bill(products, total_price, saved_price)
+    puts "Item \t Quantity \t Price \n" + "-"*30
+
+    products.each do |key, value|
+      puts "#{key.capitalize()} \t #{value.quantity} \t\t #{value.price}"
+    end
+    
+    puts "\nTotal price : $#{total_price}"
+    puts "You saved $#{saved_price.round(2)} today."
+  end
+end
+
+order = GroceryStore.new
+
+order.get_order
