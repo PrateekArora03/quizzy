@@ -9,86 +9,86 @@ end
 
 class Track
 
-  attr_accessor :morning_slot, :afternoon_slot
+  attr_accessor :morning_session, :afternoon_session
   def initialize
-    @morning_slot = Slot.new(180)
-    @afternoon_slot = Slot.new(240)
+    @morning_session = Session.new(180)
+    @afternoon_session = Session.new(240)
   end
 end
 
-class Slot
+class Session
 
-  attr_accessor :talks, :talks_length, :slot_length
-  def initialize(slot_length)
+  attr_accessor :talks, :talks_length, :length
+  def initialize(length)
     @talks = []
     @talks_length = 0
-    @slot_length = slot_length
+    @length = length
   end
 end
 
-class Schedule
+class Scheduler
 
   attr_reader :tracks
   def initialize(talks)
     @lightning_talk = lightning_talk(talks)
     @talks = talks
-    @tracks = { "Track 1": Track.new, "Track 2": Track.new }
-    scheduler
+    schedule
   end
-
+  
   private
-  def scheduler
-    current_track = "Track 1".to_sym
-    current_slot = "morning_slot"
+  def schedule
+    @current_track = "Track 1".to_sym
+    @current_session = "morning_session"
+    @tracks = { "Track 1": Track.new, "Track 2": Track.new }
 
     until @talks.empty?
       @talks.each do |talk|
         number_of_talks = @talks.length
-        track = @tracks[current_track].instance_variable_get(("@"+current_slot))
-        new_length = track.talks_length + talk.length
-        if new_length < track.slot_length
-          add_talk(track, talk)
-          delete_talk(@talks, talk)
-        elsif new_length == track.slot_length
-          add_talk(track, talk)
-          delete_talk(@talks, talk)
-          current_track, current_slot = switch_track_and_slot(current_track, current_slot)
+        @track = @tracks[@current_track].instance_variable_get(("@"+@current_session))
+        new_length = @track.talks_length + talk.length
+        if new_length < @track.length
+          add_talk(talk)
+          delete_talk(talk)
+        elsif new_length == @track.length
+          add_talk(talk)
+          delete_talk(talk)
+          @current_track, @current_session = switch_track_and_slot
         end
         if number_of_talks == @talks.length
-          last_added = track.talks.pop()
-          track.talks_length -= last_added.length
+          last_added = @track.talks.pop()
+          @track.talks_length -= last_added.length
           @talks << last_added
         end
       end
     end
-    lightning_talk_scheduler(current_track, current_slot)
+    lightning_talk_scheduler
   end
 
-  def lightning_talk_scheduler(current_track, current_slot)
+  def lightning_talk_scheduler
     @lightning_talk.each do |talk|
-      track = @tracks[current_track].instance_variable_get(("@"+current_slot))
-      new_length = track.talks_length + talk.length
-      if new_length < track.slot_length
-        add_talk(track, talk)
+      @track = @tracks[@current_track].instance_variable_get(("@"+@current_session))
+      new_length = @track.talks_length + talk.length
+      if new_length < @track.length
+        add_talk(talk)
       end
     end
   end
 
-  def switch_track_and_slot(current_track, current_slot)
-    if current_slot == "morning_slot"
-      [current_track, "afternoon_slot"]
+  def switch_track_and_slot
+    if @current_session == "morning_session"
+      [@current_track, "afternoon_session"]
     else
-      ["Track 2".to_sym, "morning_slot"]
+      ["Track 2".to_sym, "morning_session"]
     end
   end
 
-  def add_talk(track, talk)
-    track.talks << talk
-    track.talks_length += talk.length
+  def add_talk(talk)
+    @track.talks << talk
+    @track.talks_length += talk.length
   end
   
-  def delete_talk(talks, talk)
-    talks.delete talk
+  def delete_talk(talk)
+    @talks.delete talk
   end
 
   def lightning_talk(talks)
@@ -111,13 +111,17 @@ class Conference
   private
   def get_talks
     file = File.open(@file_name, 'r')
-    file.each_line{|talk| @talks << create_talk(talk)}
-    schedule = Schedule.new(@talks)
+    file.each_line{|talk| @talks << process_talk(talk)}
+    generate_schedule
+  end
+
+  def generate_schedule
+    schedule = Scheduler.new(@talks)
     tracks = schedule.tracks
     display_schedule(tracks)
   end
 
-  def create_talk(talk)
+  def process_talk(talk)
     description = talk
     length = talk.split.last == "minutes" ? talk.split[-2].to_i : 5
     Talk.new(description, length)
@@ -128,7 +132,7 @@ class Conference
       puts "\n", key, "\n"
       date = Time.now
       time = Time.new(date.year, date.month, date.day, 9, 0)
-      track.morning_slot.talks.each do |talk|
+      track.morning_session.talks.each do |talk|
         puts "#{time.strftime('%H:%M')} #{talk.description}"
         time += talk.length * 60
       end
@@ -136,7 +140,7 @@ class Conference
       puts "12:00 Lunch"
       time += 60 * 60
 
-      track.afternoon_slot.talks.each do |talk|
+      track.afternoon_session.talks.each do |talk|
         puts "#{time.strftime('%H:%M')} #{talk.description}"
         time += talk.length * 60
       end
